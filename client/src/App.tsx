@@ -11,13 +11,6 @@ import AuthPage from "@/pages/AuthPage";
 import NotFound from "@/pages/not-found";
 import { useAuth } from "@/hooks/use-auth";
 
-function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
-  const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return null;
-  if (!isAuthenticated) return <Redirect to="/auth" />;
-  return <Component />;
-}
-
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -26,9 +19,9 @@ function Router() {
       <Route path="/auth">
         {!isLoading && isAuthenticated ? <Redirect to="/" /> : <AuthPage />}
       </Route>
-      <Route path="/" component={() => <ProtectedRoute component={DomainGrid} />} />
-      <Route path="/domain/:familyId" component={() => <ProtectedRoute component={DomainView} />} />
-      <Route path="/results" component={() => <ProtectedRoute component={ResultsPage} />} />
+      <Route path="/" component={DomainGrid} />
+      <Route path="/domain/:familyId" component={DomainView} />
+      <Route path="/results" component={ResultsPage} />
       <Route component={NotFound} />
     </Switch>
   );

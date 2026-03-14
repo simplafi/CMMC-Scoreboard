@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { computeStatusFromObjectives } from "@/context/AssessmentContext";
 import type { ControlFamily } from "@shared/schema";
+import { Link } from "wouter";
 
 function getFamilyStats(familyId: ControlFamily, completedObjectives: Set<string>) {
   const familyControls = controls.filter((c) => c.family === familyId);
@@ -79,6 +80,18 @@ export default function DomainGrid() {
         notMet={stats.notMet}
         partial={stats.partial}
       />
+
+      {!isAuthenticated && (
+        <div className="bg-primary/10 border-b border-primary/20 px-4 py-2.5 flex items-center justify-between gap-3 flex-wrap">
+          <p className="text-sm text-foreground">
+            <span className="font-medium">Your progress is not being saved.</span>{" "}
+            Create a free account to save and resume your assessment from anywhere.
+          </p>
+          <Link href="/auth" className="text-sm font-semibold text-primary hover:underline whitespace-nowrap">
+            Sign up free →
+          </Link>
+        </div>
+      )}
 
       <main className="flex-1 px-3 sm:px-6 py-6">
         <div className="max-w-6xl mx-auto space-y-6">

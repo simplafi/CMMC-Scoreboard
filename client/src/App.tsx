@@ -7,6 +7,7 @@ import { AssessmentProvider } from "@/context/AssessmentContext";
 import DomainGrid from "@/pages/DomainGrid";
 import DomainView from "@/pages/DomainView";
 import ResultsPage from "@/pages/ResultsPage";
+import WelcomePage from "@/pages/WelcomePage";
 import AuthPage from "@/pages/AuthPage";
 import NotFound from "@/pages/not-found";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/auth">
         {!isLoading && isAuthenticated ? <Redirect to="/" /> : <AuthPage />}
       </Route>
+      <Route path="/welcome" component={WelcomePage} />
       <Route path="/" component={DomainGrid} />
       <Route path="/domain/:familyId" component={DomainView} />
       <Route path="/results" component={ResultsPage} />

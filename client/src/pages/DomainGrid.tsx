@@ -56,18 +56,8 @@ export default function DomainGrid() {
     return null;
   }
 
-  if (!hasStarted) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <Header isSaving={isSaving} lastSaved={lastSaved} />
-        <main className="flex-1">
-          <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
-            <LandingPage onStart={() => setHasStarted(true)} isAuthenticated={isAuthenticated} />
-          </div>
-        </main>
-      </div>
-    );
-  }
+  // Landing page available at /welcome route if needed
+  // Users now go straight to the assessment grid
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

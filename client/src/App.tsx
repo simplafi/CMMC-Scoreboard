@@ -18,10 +18,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/auth">
-        {!isLoading && isAuthenticated ? <Redirect to="/" /> : <AuthPage />}
+        {!isLoading && isAuthenticated ? <Redirect to="/assess" /> : <AuthPage />}
       </Route>
-      <Route path="/welcome" component={WelcomePage} />
-      <Route path="/" component={DomainGrid} />
+      <Route path="/" component={WelcomePage} />
+      <Route path="/assess" component={DomainGrid} />
       <Route path="/domain/:familyId" component={DomainView} />
       <Route path="/results" component={ResultsPage} />
       <Route component={NotFound} />

@@ -9,7 +9,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
-import { LogOut, Save, Loader2, ExternalLink, ArrowLeft } from "lucide-react";
+import { LogOut, Save, Loader2, ArrowLeft } from "lucide-react";
 import simplifiLogo from "@assets/SImplafi_Logo_2025-white_1768695773677.png";
 
 interface HeaderProps {
@@ -51,13 +51,13 @@ export function Header({ isSaving, lastSaved, domainName, onBack }: HeaderProps)
               <span className="hidden sm:inline">Back</span>
             </Button>
           ) : (
-            <a
-              href="https://app.simplafi.us"
+            <Link
+              href="/"
               className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Return to Simplafi
-            </a>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Home
+            </Link>
           )}
         </div>
 

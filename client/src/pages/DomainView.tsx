@@ -30,7 +30,7 @@ export default function DomainView() {
   // Validate family ID
   const familyParse = controlFamilySchema.safeParse(params.familyId);
   useEffect(() => {
-    if (!familyParse.success) navigate("/");
+    if (!familyParse.success) navigate("/assess");
   }, [familyParse.success]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function DomainView() {
         isSaving={isSaving}
         lastSaved={lastSaved}
         domainName={meta.name}
-        onBack={() => navigate("/")}
+        onBack={() => navigate("/assess")}
       />
 
       <main className="flex-1 px-3 sm:px-6 py-6">
@@ -123,7 +123,7 @@ export default function DomainView() {
           </div>
 
           <div className="flex justify-start pt-2">
-            <Button variant="outline" onClick={() => navigate("/")} className="gap-2">
+            <Button variant="outline" onClick={() => navigate("/assess")} className="gap-2">
               <ArrowLeft className="w-4 h-4" />
               Back to Domains
             </Button>

@@ -11,14 +11,14 @@ export default function ResultsPage() {
   const { result, setResult, isSaving, lastSaved } = useAssessment();
 
   useEffect(() => {
-    if (!result) navigate("/");
+    if (!result) navigate("/assess");
   }, [result]);
 
   if (!result) return null;
 
   const handleBack = () => {
     setResult(null);
-    navigate("/");
+    navigate("/assess");
   };
 
   return (

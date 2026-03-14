@@ -133,7 +133,7 @@ export default function AuthPage() {
   const [, navigate] = useLocation();
   const [tab, setTab] = useState<"login" | "register">("login");
 
-  const handleSuccess = () => navigate("/");
+  const handleSuccess = () => navigate("/assess");
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

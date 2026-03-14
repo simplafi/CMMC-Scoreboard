@@ -1,0 +1,158 @@
+1. Reframe the tool’s role in your ecosystem
+
+Current role
+
+Standalone calculator.
+
+High utility, low capture.
+
+Target role
+
+Top-of-funnel qualification tool that:
+
+Educates.
+
+Pre-qualifies.
+
+Segments prospects by risk and readiness.
+
+Routes them into the right Simplafi service.
+
+Think of it as a “diagnostic entry point,” not a calculator.
+
+2. Brand the experience without adding friction
+A. Clarify ownership and authority
+
+Right now, branding is only visible at the footer.
+
+Improve with
+
+Header sub-branding:
+
+“Simplafi CMMC Readiness Tools”
+
+Short credibility line under the title:
+
+“Built by CMMC practitioners supporting DoD contractors nationwide.”
+
+This establishes authority without sounding salesy.
+
+B. Add contextual Simplafi touchpoints, not banners
+
+Instead of ads, embed contextual guidance blocks:
+
+Example placement
+
+After SSP question:
+
+“Organizations without an SSP cannot receive an SPRS score. This is the most common readiness blocker we see.”
+
+Small “Why this matters” callouts reinforce expertise.
+
+3. Turn results into a conversion moment
+A. Score-based outcome tiers
+
+After calculation, classify results:
+
+Score Range	Label	Messaging Focus
+90–110	Strong posture	Validation, maintenance
+60–89	Moderate risk	Gap remediation
+0–59	High risk	Contract eligibility risk
+Below 0	Critical	Immediate action
+
+Each tier should have one tailored next step, not multiple CTAs.
+
+B. Soft CTA tied to risk, not sales
+
+Examples
+
+“Understand what controls are impacting your score”
+
+“See how assessors validate this control”
+
+“Map your score to a defensible SSP”
+
+Only one CTA per tier.
+
+4. Capture leads without forcing sign-ups
+A. Progressive value exchange
+
+Instead of “Sign in to save,” offer:
+
+Save results as PDF.
+
+Email summary with:
+
+Score.
+
+Top 5 deductions.
+
+Common assessor pitfalls.
+
+Email capture becomes natural, not mandatory.
+
+B. Add assessor-language previews
+
+Include small locked sections:
+
+“How an assessor will interpret this answer”
+
+“What evidence typically satisfies this control”
+
+Unlock via email.
+
+5. Use the tool to pre-qualify consulting engagements
+A. Embed structured handoff data
+
+When users opt in, capture:
+
+Score.
+
+SSP status.
+
+Top failing control families.
+
+Environment type (Commercial, GCC, GCC High).
+
+This allows:
+
+Faster discovery calls.
+
+Higher close rates.
+
+Better pricing alignment.
+
+6. Position it as an industry resource, not a sales page
+A. External marketing uses
+
+LinkedIn posts:
+
+“Before your next CMMC conversation, know your estimated SPRS score.”
+
+Partner referrals:
+
+MSPs, CPAs, primes can safely share it.
+
+B. Credibility signal
+
+“Used by DoD contractors preparing for Level 2 assessments.”
+
+No logos needed. Language matters.
+
+7. Monetization paths that preserve trust
+
+You do not need to charge for the calculator.
+
+Better options:
+
+Free calculator.
+
+Paid:
+
+Readiness review.
+
+Assessor-style control walkthrough.
+
+SSP validation.
+
+The calculator becomes proof of competence, not the product.

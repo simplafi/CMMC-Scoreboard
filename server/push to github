@@ -1,0 +1,4 @@
+cd "C:\CMMC Scoreboard"
+git add .
+git commit -m "Allow unauthenticated access, add save nudge banner"
+git push

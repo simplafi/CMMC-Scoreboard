@@ -8,10 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { Control, ControlStatus } from "@shared/schema";
 import { objectiveGuidance } from "@shared/objectiveGuidance";
+import { hasOdp, getOdp } from "@shared/odp";
 import { cn } from "@/lib/utils";
 import { useState, useMemo, useCallback, useEffect } from "react";
+import dodSeal from "@assets/dod-odp.svg";
 
 interface ControlCardProps {
   control: Control;
@@ -145,14 +148,29 @@ export function ControlCard({
                 </Badge>
               )}
               {localNotes && (
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className="text-[10px] sm:text-xs bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800"
                   data-testid={`badge-has-notes-${control.id}`}
                 >
                   <StickyNote className="w-3 h-3" />
                   <span className="hidden sm:inline ml-1">Notes</span>
                 </Badge>
+              )}
+              {hasOdp(control.id) && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-[#203464]/30 bg-[#203464]/5 hover:bg-[#203464]/15 transition-colors cursor-pointer"
+                      title="DoD Organization-Defined Parameters"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <img src={dodSeal} alt="DoD ODP" className="w-4 h-4" />
+                      <span className="text-[10px] sm:text-xs font-medium text-[#203464] dark:text-blue-300 hidden sm:inline">ODP</span>
+                    </button>
+                  </DialogTrigger>
+                  <OdpDialog controlId={control.id} />
+                </Dialog>
               )}
             </div>
             <h3 className="font-medium mt-1 text-xs sm:text-sm">{control.title}</h3>
@@ -392,5 +410,113 @@ export function ControlCard({
         </CollapsibleContent>
       </Collapsible>
     </Card>
+  );
+}
+
+function OdpDialog({ controlId }: { controlId: string }) {
+  const odp = getOdp(controlId);
+  if (!odp) return null;
+
+  return (
+    <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+      <DialogHeader>
+        <div className="flex items-center gap-3">
+          <img src={dodSeal} alt="DoD Seal" className="w-8 h-8" />
+          <div>
+            <DialogTitle className="text-lg">
+              DoD Organization-Defined Parameters
+            </DialogTitle>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {controlId} &mdash; {odp.rev3Title}
+            </p>
+          </div>
+        </div>
+      </DialogHeader>
+
+      {/* Rev 3 Statement */}
+      <div className="mt-4 space-y-3">
+        <h4 className="text-sm font-semibold">Control Requirements (Rev 3)</h4>
+        <div className="space-y-1.5 pl-1">
+          {odp.statement.map((item, i) => (
+            <p key={i} className="text-sm text-muted-foreground leading-relaxed">
+              {item.split(/(\[ODP:[^\]]+\])/).map((part, j) =>
+                part.startsWith("[ODP:") ? (
+                  <span
+                    key={j}
+                    className="font-semibold text-[#be4c13] bg-[#be4c13]/10 px-1 rounded"
+                  >
+                    {part}
+                  </span>
+                ) : (
+                  <span key={j}>{part}</span>
+                )
+              )}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* ODP Values Table */}
+      <div className="mt-5">
+        <h4 className="text-sm font-semibold mb-3">DoD-Defined Values</h4>
+        <div className="border rounded-lg overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[#203464] text-white">
+                <th className="px-3 py-2 text-left font-medium w-[140px]">ODP Identifier</th>
+                <th className="px-3 py-2 text-left font-medium">Assignment Text</th>
+                <th className="px-3 py-2 text-left font-medium">DoD Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {odp.odps.map((entry, i) => (
+                <tr
+                  key={entry.odpId}
+                  className={cn(
+                    "border-t",
+                    i % 2 === 0 ? "bg-muted/20" : "bg-background"
+                  )}
+                >
+                  <td className="px-3 py-2.5 font-mono text-xs text-primary align-top">
+                    {entry.odpId}
+                  </td>
+                  <td className="px-3 py-2.5 text-muted-foreground align-top text-xs">
+                    [{entry.assignmentText}]
+                  </td>
+                  <td className="px-3 py-2.5 font-medium align-top text-xs leading-relaxed">
+                    {entry.value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Related Controls */}
+      {odp.relatedControls.length > 0 && (
+        <div className="mt-4">
+          <h4 className="text-xs font-medium text-muted-foreground mb-1.5">
+            Related 800-53 Controls
+          </h4>
+          <div className="flex flex-wrap gap-1.5">
+            {odp.relatedControls.map((rc) => (
+              <Badge key={rc} variant="outline" className="text-[10px] font-mono">
+                {rc}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Source attribution */}
+      <div className="mt-4 pt-3 border-t">
+        <p className="text-[10px] text-muted-foreground leading-relaxed">
+          Source: Department of Defense Organization-Defined Parameters for NIST SP 800-171 Revision 3,
+          signed April 10, 2025 by David W. McKeown, Performing the Duties of the Deputy DoD CIO for
+          Cybersecurity and DoD CISO. Cleared for Open Publication April 15, 2025.
+        </p>
+      </div>
+    </DialogContent>
   );
 }

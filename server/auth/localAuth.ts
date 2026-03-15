@@ -1,10 +1,11 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import bcrypt from "bcryptjs";
 import type { Express, RequestHandler } from "express";
-import { getUser, getUserByEmail } from "./storage";
+import { getUser, getUserByEmail, upsertOAuthUser } from "./storage";
 import type { User } from "@shared/models/auth";
 
 export function getSession() {
@@ -60,6 +61,58 @@ export function setupAuth(app: Express) {
       }
     )
   );
+
+  // Microsoft OAuth strategy
+  if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
+    const callbackURL = process.env.NODE_ENV === "production"
+      ? "https://app.simplafi.us/api/auth/microsoft/callback"
+      : "http://localhost:5000/api/auth/microsoft/callback";
+
+    passport.use(
+      new MicrosoftStrategy(
+        {
+          clientID: process.env.MICROSOFT_CLIENT_ID,
+          clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
+          callbackURL,
+          scope: ["user.read"],
+          tenant: "common",
+          authorizationURL: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+          tokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        },
+        async (
+          _accessToken: string,
+          _refreshToken: string,
+          profile: any,
+          done: (err: any, user?: Express.User | false) => void
+        ) => {
+          try {
+            const email =
+              profile.emails?.[0]?.value ||
+              profile._json?.mail ||
+              profile._json?.userPrincipalName;
+
+            if (!email) {
+              return done(null, false);
+            }
+
+            const user = await upsertOAuthUser({
+              email,
+              firstName: profile.name?.givenName || null,
+              lastName: profile.name?.familyName || null,
+              profileImageUrl: profile.photos?.[0]?.value || null,
+            });
+
+            return done(null, user);
+          } catch (err) {
+            return done(err);
+          }
+        }
+      )
+    );
+    console.log("Microsoft OAuth strategy configured");
+  } else {
+    console.log("Microsoft OAuth not configured (MICROSOFT_CLIENT_ID/SECRET not set)");
+  }
 
   passport.serializeUser((user: Express.User, cb) => {
     cb(null, (user as User).id);

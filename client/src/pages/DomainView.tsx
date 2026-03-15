@@ -34,7 +34,21 @@ export default function DomainView() {
   }, [familyParse.success]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
+    const hash = window.location.hash;
+    if (hash) {
+      // Delay to allow DOM to render, then scroll to the anchor
+      const timer = setTimeout(() => {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.classList.add("ring-2", "ring-primary", "ring-offset-2");
+          setTimeout(() => el.classList.remove("ring-2", "ring-primary", "ring-offset-2"), 2000);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo({ top: 0 });
+    }
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -100,6 +114,7 @@ export default function DomainView() {
               return (
                 <motion.div
                   key={control.id}
+                  id={`control-${control.id}`}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.02 }}

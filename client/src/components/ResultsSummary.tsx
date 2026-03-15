@@ -5,9 +5,19 @@ import { ScoreGauge } from "./ScoreGauge";
 import { AssessmentPDFReport } from "./AssessmentPDFReport";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useAuth } from "@/hooks/use-auth";
-import type { AssessmentResult } from "@shared/schema";
+import { Link } from "wouter";
+import type { AssessmentResult, ControlFamily } from "@shared/schema";
+import { familyMetadata } from "@shared/schema";
 import { motion } from "framer-motion";
 import { CheckCircle2, XCircle, AlertCircle, AlertTriangle, TrendingDown, Target, Shield, ShieldAlert, ShieldCheck, ShieldX, ArrowRight, Download } from "lucide-react";
+
+function getFamilyKeyFromControlId(controlId: string): ControlFamily | null {
+  const prefix = controlId.split(".").slice(0, 2).join(".");
+  for (const [key, meta] of Object.entries(familyMetadata)) {
+    if (meta.prefix === prefix) return key as ControlFamily;
+  }
+  return null;
+}
 
 interface ResultsSummaryProps {
   result: AssessmentResult;
@@ -254,34 +264,42 @@ export function ResultsSummary({ result }: ResultsSummaryProps) {
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {result.failedControls
                 .sort((a, b) => b.weight - a.weight)
-                .map((control) => (
-                  <div
-                    key={control.id}
-                    className="flex items-center gap-3 p-3 rounded-md bg-muted/30 hover-elevate"
-                    data-testid={`failed-control-${control.id}`}
-                  >
-                    <Badge 
-                      className={
-                        control.weight === 5 
-                          ? "bg-destructive/10 text-destructive border-destructive/20" 
-                          : control.weight === 3 
-                            ? "bg-chart-2/10 text-chart-2 border-chart-2/20" 
-                            : ""
-                      }
-                      variant={control.weight === 1 ? "secondary" : "outline"}
+                .map((control) => {
+                  const familyKey = getFamilyKeyFromControlId(control.id);
+                  const href = familyKey
+                    ? `/domain/${familyKey}#control-${control.id}`
+                    : "#";
+
+                  return (
+                    <Link
+                      key={control.id}
+                      href={href}
+                      className="flex items-center gap-3 p-3 rounded-md bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer group"
+                      data-testid={`failed-control-${control.id}`}
                     >
-                      -{control.weight}
-                    </Badge>
-                    <div className="flex-1 min-w-0">
-                      <span className="font-mono text-sm font-semibold text-primary">{control.id}</span>
-                      <span className="mx-2 text-muted-foreground">|</span>
-                      <span className="text-sm">{control.title}</span>
-                    </div>
-                    <Badge variant="secondary" className="text-xs flex-shrink-0">
-                      {control.family}
-                    </Badge>
-                  </div>
-                ))}
+                      <Badge
+                        className={
+                          control.weight === 5
+                            ? "bg-destructive/10 text-destructive border-destructive/20"
+                            : control.weight === 3
+                              ? "bg-chart-2/10 text-chart-2 border-chart-2/20"
+                              : ""
+                        }
+                        variant={control.weight === 1 ? "secondary" : "outline"}
+                      >
+                        -{control.weight}
+                      </Badge>
+                      <div className="flex-1 min-w-0">
+                        <span className="font-mono text-sm font-semibold text-primary group-hover:underline">{control.id}</span>
+                        <span className="mx-2 text-muted-foreground">|</span>
+                        <span className="text-sm">{control.title}</span>
+                      </div>
+                      <Badge variant="secondary" className="text-xs flex-shrink-0">
+                        {control.family}
+                      </Badge>
+                    </Link>
+                  );
+                })}
             </div>
           </CardContent>
         </Card>

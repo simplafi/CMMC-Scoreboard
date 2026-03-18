@@ -49,7 +49,7 @@ async function createContact(contact: CRMContact): Promise<string | null> {
       lastName: contact.lastName || "",
       email: contact.email,
       locationId,
-      source: "Simplafi CMMC Tracker",
+      source: "Simplafi CMMC Compliance Tracker",
     }),
   });
 

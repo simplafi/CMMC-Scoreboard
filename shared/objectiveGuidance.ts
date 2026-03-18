@@ -1,4 +1,5 @@
 export type ObjectiveType = "POLICY" | "CONFIG";
+export type ConfidenceLevel = "HIGH" | "MEDIUM" | "LOW";
 
 export interface ObjectiveGuidance {
   type: ObjectiveType;
@@ -12,7 +13,7 @@ export interface ObjectiveGuidance {
   /** Assessment considerations / interview questions */
   assessmentConsiderations?: string[];
   /** Confidence level of POLICY/CONFIG classification */
-  confidence?: string;
+  confidence?: ConfidenceLevel;
   /** Primary verb driving the classification */
   verb?: string;
 }

@@ -116,16 +116,13 @@ export function ControlCard({
     <Card className="p-3 sm:p-4 hover-elevate" data-testid={`control-card-${control.id}`}>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <div className="flex items-start gap-2 sm:gap-3">
-          <div className="flex-shrink-0 mt-0.5">
-            {getStatusIcon()}
-          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <span className="font-mono text-xs sm:text-sm font-semibold text-primary">{control.id}</span>
               <Badge variant="outline" className={cn("text-[10px] sm:text-xs", getWeightBadgeColor())}>
                 {control.weight}pt{control.weight !== 1 ? "s" : ""}
               </Badge>
-              {control.hasPartialCredit && (
+              {control.hasPartialCredit && someObjectivesMet && (
                 <Badge variant="outline" className="text-[10px] sm:text-xs bg-chart-4/10 text-chart-4 border-chart-4/20">
                   Partial
                 </Badge>

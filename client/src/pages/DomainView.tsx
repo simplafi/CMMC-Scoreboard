@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUp } from "lucide-react";
 import { useAssessment, computeStatusFromObjectives } from "@/context/AssessmentContext";
 import { useAuth } from "@/hooks/use-auth";
 import { controls } from "@shared/controls";
+import { getDomainCrmCounts } from "@shared/crm";
 import { familyIcons, familyMetadata } from "@/lib/familyUtils";
 import { getScoreColor } from "@/lib/scoreUtils";
 import { controlFamilySchema, type ControlFamily } from "@shared/schema";
@@ -101,6 +102,7 @@ export default function DomainView() {
                   <div className={cn("text-sm font-semibold tabular-nums", getScoreColor(liveScore))}>
                     Score: {liveScore}
                   </div>
+                  <CrmRollup controls={familyControls} />
                 </div>
               </div>
             </div>
@@ -153,6 +155,19 @@ export default function DomainView() {
           </Button>
         </div>
       )}
+    </div>
+  );
+}
+
+function CrmRollup({ controls }: { controls: { id: string }[] }) {
+  const counts = getDomainCrmCounts(controls);
+  if (counts.inherited + counts.shared + counts.company === 0) return null;
+
+  return (
+    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      {counts.shared > 0 && <span>{counts.shared} Shared</span>}
+      {counts.company > 0 && <span>{counts.company > 0 && counts.shared > 0 ? "· " : ""}{counts.company} Company</span>}
+      {counts.inherited > 0 && <span>{(counts.shared > 0 || counts.company > 0) ? "· " : ""}{counts.inherited} Inherited</span>}
     </div>
   );
 }

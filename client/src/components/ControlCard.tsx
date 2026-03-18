@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import type { Control, ControlStatus } from "@shared/schema";
 import { objectiveGuidance } from "@shared/objectiveGuidance";
 import { hasOdp, getOdp } from "@shared/odp";
+import { hasCrm, getCrm } from "@shared/crm";
 import { cn } from "@/lib/utils";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import dodSeal from "@assets/dod-odp.svg";
@@ -171,6 +172,9 @@ export function ControlCard({
                   </DialogTrigger>
                   <OdpDialog controlId={control.id} />
                 </Dialog>
+              )}
+              {hasCrm(control.id) && (
+                <CrmBadge controlId={control.id} />
               )}
             </div>
             <h3 className="font-medium mt-1 text-xs sm:text-sm">{control.title}</h3>
@@ -518,5 +522,82 @@ function OdpDialog({ controlId }: { controlId: string }) {
         </p>
       </div>
     </DialogContent>
+  );
+}
+
+const crmTierStyles: Record<string, string> = {
+  Inherited: "border-green-300 text-green-700 bg-green-50 dark:border-green-700 dark:text-green-300 dark:bg-green-950",
+  Shared: "border-blue-300 text-blue-700 bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:bg-blue-950",
+  Company: "border-orange-300 text-orange-700 bg-orange-50 dark:border-orange-700 dark:text-orange-300 dark:bg-orange-950",
+};
+
+function CrmBadge({ controlId }: { controlId: string }) {
+  const crm = getCrm(controlId);
+  if (!crm) return null;
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          className={cn(
+            "inline-flex items-center px-1.5 py-0.5 rounded-md border text-[10px] sm:text-xs font-medium transition-colors cursor-pointer hover:opacity-80",
+            crmTierStyles[crm.tier]
+          )}
+          title="Cloud Responsibility Model"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {crm.tier}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-[280px] sm:w-96 text-sm"
+        side="left"
+        align="start"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Badge
+              variant="outline"
+              className={cn("text-[10px] px-1.5 py-0", crmTierStyles[crm.tier])}
+            >
+              {crm.tier}
+            </Badge>
+            <span className="font-medium text-xs text-muted-foreground">
+              Cloud Responsibility Model
+            </span>
+          </div>
+
+          <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
+            {crm.summary}
+          </p>
+
+          <div className="space-y-2">
+            <div>
+              <p className="text-xs font-medium text-foreground mb-0.5">Microsoft covers:</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{crm.microsoftCovers}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-foreground mb-0.5">Your organization owns:</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{crm.customerOwns}</p>
+            </div>
+          </div>
+
+          {crm.services.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {crm.services.map((svc) => (
+                <Badge key={svc} variant="secondary" className="text-[10px] px-1.5 py-0">
+                  {svc}
+                </Badge>
+              ))}
+            </div>
+          )}
+
+          <p className="text-[10px] text-muted-foreground leading-relaxed border-t pt-2">
+            Based on Microsoft 365 GCC High at the G5 license level. Verify current coverage in the Microsoft Service Trust Portal.
+          </p>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

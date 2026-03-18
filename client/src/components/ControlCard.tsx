@@ -209,8 +209,8 @@ export function ControlCard({
                   {control.objectives.map((obj, idx) => {
                     const isChecked = completedObjectives.has(obj.id);
                     const guidance = objectiveGuidance[obj.id];
-                    const hasRealNotes = guidance && guidance.notes && guidance.notes !== "[GUIDANCE NEEDED]";
-                    
+                    const hasSimplafi = guidance && !!guidance.simplafi;
+
                     return (
                       <div 
                         key={obj.id} 
@@ -255,43 +255,43 @@ export function ControlCard({
                                   {guidance.type}
                                 </Badge>
                               )}
-                              {hasRealNotes && (
+                              {hasSimplafi && (
                                 <Popover>
                                   <PopoverTrigger asChild>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
                                       className="h-5 w-5 text-muted-foreground hover:text-foreground"
                                       data-testid={`button-info-${obj.id}`}
                                     >
                                       <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent 
-                                    className="w-[260px] sm:w-80 text-sm" 
+                                  <PopoverContent
+                                    className="w-[260px] sm:w-80 text-sm"
                                     side="left"
                                     align="start"
                                     data-testid={`popover-notes-${obj.id}`}
                                   >
                                     <div className="space-y-2">
                                       <div className="flex items-center gap-2">
-                                        <Badge 
-                                          variant="outline" 
+                                        <Badge
+                                          variant="outline"
                                           className={cn(
                                             "text-[10px] px-1.5 py-0",
-                                            guidance.type === "POLICY" 
-                                              ? "bg-blue-50 text-blue-700 border-blue-200" 
+                                            guidance.type === "POLICY"
+                                              ? "bg-blue-50 text-blue-700 border-blue-200"
                                               : "bg-purple-50 text-purple-700 border-purple-200"
                                           )}
                                         >
                                           {guidance.type}
                                         </Badge>
                                         <span className="font-medium text-xs text-muted-foreground">
-                                          Implementation Notes
+                                          What this means for your business
                                         </span>
                                       </div>
                                       <p className="text-xs sm:text-sm leading-relaxed">
-                                        {guidance.notes}
+                                        {guidance.simplafi}
                                       </p>
                                     </div>
                                   </PopoverContent>

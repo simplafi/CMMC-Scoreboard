@@ -156,32 +156,6 @@ export default function AuthPage() {
           </div>
 
           <Card>
-            <CardContent className="pt-6">
-              <a
-                href="/api/auth/microsoft"
-                className="flex items-center justify-center gap-3 w-full px-4 py-2.5 rounded-md border bg-background hover:bg-muted transition-colors text-sm font-medium"
-              >
-                <svg viewBox="0 0 21 21" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="1" y="1" width="9" height="9" fill="#F25022" />
-                  <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
-                  <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
-                  <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
-                </svg>
-                Sign in with Microsoft
-              </a>
-            </CardContent>
-          </Card>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
-            </div>
-          </div>
-
-          <Card>
             <CardHeader className="pb-2">
               <Tabs value={tab} onValueChange={(v) => setTab(v as "login" | "register")}>
                 <TabsList className="w-full">

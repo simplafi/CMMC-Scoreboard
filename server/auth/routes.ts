@@ -89,19 +89,4 @@ export function registerAuthRoutes(app: Express) {
     });
   });
 
-  // Microsoft OAuth
-  if (process.env.MICROSOFT_CLIENT_ID) {
-    app.get(
-      "/api/auth/microsoft",
-      passport.authenticate("microsoft", { prompt: "select_account" })
-    );
-
-    app.get(
-      "/api/auth/microsoft/callback",
-      passport.authenticate("microsoft", { failureRedirect: "/auth?error=microsoft" }),
-      (_req, res) => {
-        res.redirect("/assess");
-      }
-    );
-  }
 }

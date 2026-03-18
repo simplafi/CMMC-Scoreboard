@@ -160,7 +160,7 @@ export default function DomainView() {
 }
 
 function CrmRollup({ controls }: { controls: { id: string }[] }) {
-  const counts = getDomainCrmCounts(controls);
+  const counts = getDomainCrmCounts(controls.map(c => c.id));
   if (counts.inherited + counts.shared + counts.company === 0) return null;
 
   return (

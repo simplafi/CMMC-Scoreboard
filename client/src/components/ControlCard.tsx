@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import type { Control, ControlStatus } from "@shared/schema";
 import { objectiveGuidance } from "@shared/objectiveGuidance";
 import { hasOdp, getOdp } from "@shared/odp";
-import { hasCrm, getCrm } from "@shared/crm";
+import { hasCrm, getCrm, crmDisclaimer } from "@shared/crm";
 import { cn } from "@/lib/utils";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import dodSeal from "@assets/dod-odp.svg";
@@ -125,9 +125,6 @@ export function ControlCard({
               <Badge variant="outline" className={cn("text-[10px] sm:text-xs", getWeightBadgeColor())}>
                 {control.weight}pt{control.weight !== 1 ? "s" : ""}
               </Badge>
-              {control.isBasic && (
-                <Badge variant="secondary" className="text-[10px] sm:text-xs hidden sm:inline-flex">Basic</Badge>
-              )}
               {control.hasPartialCredit && (
                 <Badge variant="outline" className="text-[10px] sm:text-xs bg-chart-4/10 text-chart-4 border-chart-4/20">
                   Partial
@@ -272,7 +269,7 @@ export function ControlCard({
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent
-                                    className="w-[260px] sm:w-80 text-sm"
+                                    className="w-[280px] sm:w-96 text-sm"
                                     side="left"
                                     align="start"
                                     data-testid={`popover-notes-${obj.id}`}
@@ -297,6 +294,19 @@ export function ControlCard({
                                       <p className="text-xs sm:text-sm leading-relaxed">
                                         {guidance.simplafi}
                                       </p>
+                                      {guidance.notes && (
+                                        <Collapsible>
+                                          <CollapsibleTrigger className="flex items-center gap-1 text-xs text-primary hover:underline mt-1">
+                                            <ChevronDown className="h-3 w-3 transition-transform [[data-state=open]>&]:rotate-180" />
+                                            Technical details
+                                          </CollapsibleTrigger>
+                                          <CollapsibleContent className="pt-2">
+                                            <p className="text-xs text-muted-foreground leading-relaxed border-t pt-2">
+                                              {guidance.notes}
+                                            </p>
+                                          </CollapsibleContent>
+                                        </Collapsible>
+                                      )}
                                     </div>
                                   </PopoverContent>
                                 </Popover>
@@ -593,9 +603,13 @@ function CrmBadge({ controlId }: { controlId: string }) {
             </div>
           )}
 
-          <p className="text-[10px] text-muted-foreground leading-relaxed border-t pt-2">
-            Based on Microsoft 365 GCC High at the G5 license level. Verify current coverage in the Microsoft Service Trust Portal.
-          </p>
+          <div className="border-t pt-3 space-y-1">
+            {crmDisclaimer.map((line, i) => (
+              <p key={i} className="text-[10px] text-muted-foreground italic leading-snug">
+                {line.replace("{Organization Name}", "Your organization")}
+              </p>
+            ))}
+          </div>
         </div>
       </PopoverContent>
     </Popover>

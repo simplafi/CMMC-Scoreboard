@@ -1,0 +1,164 @@
+{
+  "_description": "Integration mapping for CMMC Scoreboard app",
+  "_generated": "2026-03-15",
+  "_source": "Policy or Config enrichment pipeline",
+  "files": {
+    "odp.ts": {
+      "description": "Complete DoD ODP values \u2014 drop-in replacement for shared/odp.ts",
+      "what_changed": "Expanded from 7 controls to 40 controls",
+      "controls_added": [
+        "3.2.1",
+        "3.2.2",
+        "3.3.1",
+        "3.3.4",
+        "3.3.5",
+        "3.3.7",
+        "3.4.1",
+        "3.4.2",
+        "3.4.6",
+        "3.4.8",
+        "3.4.9",
+        "3.5.1",
+        "3.5.2",
+        "3.5.5",
+        "3.5.7",
+        "3.5.10",
+        "3.6.2",
+        "3.6.3",
+        "3.8.7",
+        "3.9.1",
+        "3.9.2",
+        "3.10.1",
+        "3.10.2",
+        "3.10.6",
+        "3.11.1",
+        "3.11.2",
+        "3.12.1",
+        "3.13.9",
+        "3.13.10",
+        "3.13.11",
+        "3.13.12",
+        "3.14.1",
+        "3.14.2"
+      ],
+      "total_controls": 40,
+      "total_objective_rows_with_odp": 124,
+      "interface_changes": "None \u2014 same OdpEntry and ControlOdp interfaces",
+      "notes": [
+        "Original 7 AC controls preserved with full R3 statement text and relatedControls",
+        "New 33 controls have ODP values but empty statement[] and relatedControls[]",
+        "The UI will render ODP values table correctly for all controls",
+        "Statement section will be empty for new controls (can be populated later from R3 source)"
+      ]
+    },
+    "objectiveGuidance.ts": {
+      "description": "Enriched objective guidance \u2014 drop-in replacement for shared/objectiveGuidance.ts",
+      "what_changed": "Added simplafi field, upgraded notes, added assessment metadata",
+      "interface_changes": [
+        "Added simplafi?: string (plain-English tooltip, 60-90 words)",
+        "Added discussion?: string (Assessment Guide discussion text)",
+        "Added furtherDiscussion?: string (practical examples)",
+        "Added assessmentConsiderations?: string[] (interview questions)",
+        "Added confidence?: string (HIGH/MEDIUM classification confidence)",
+        "Added verb?: string (primary verb driving POLICY/CONFIG classification)"
+      ],
+      "coverage": {
+        "total_objectives": 320,
+        "with_enrichment": 320,
+        "with_simplafi": 320,
+        "still_guidance_needed": 0
+      },
+      "notes": [
+        "simplafi field contains 'Let\\'s Simplafi It' hover-over tooltip content",
+        "Targets non-technical business owners (60-90 word range)",
+        "References Microsoft GCC/GCCH ecosystem (Entra, Intune, Purview, Defender)",
+        "POLICY/CONFIG enforcement pairs cross-referenced in tooltip text",
+        "discussion/furtherDiscussion truncated to 500 chars to manage file size",
+        "Full enrichment data available in cmmc-objectives-complete.json if needed"
+      ]
+    }
+  },
+  "objective_id_mapping": {
+    "description": "3 single-objective controls use different ID format",
+    "our_format_to_app_format": {
+      "3.4.4": "3.4.4.a",
+      "3.5.4": "3.5.4.a",
+      "3.5.9": "3.5.9.a"
+    },
+    "note": "Already handled in the generated files \u2014 app IDs are used throughout"
+  },
+  "ui_integration_suggestions": {
+    "simplafi_tooltip": {
+      "description": "Add hover-over tooltip to each objective in ControlCard.tsx",
+      "field": "objectiveGuidance[obj.id]?.simplafi",
+      "suggested_component": "Tooltip or Popover wrapping the objective label",
+      "note": "This is the 'Let\\'s Simplafi It' hover content \u2014 click-in opens full enrichment"
+    },
+    "odp_badge": {
+      "description": "ODP badge/dialog already exists in ControlCard.tsx \u2014 no UI changes needed",
+      "note": "Just replacing odp.ts adds the remaining 33 controls automatically"
+    },
+    "enriched_notes": {
+      "description": "The notes field now has real implementation guidance for all objectives",
+      "note": "AC domain already had real notes in the app; now all 14 domains are populated"
+    }
+  },
+  "odp_controls_by_domain": {
+    "AC": [
+      "3.1.1",
+      "3.1.5",
+      "3.1.6",
+      "3.1.8",
+      "3.1.10",
+      "3.1.11",
+      "3.1.20",
+      "3.10.1",
+      "3.10.2",
+      "3.10.6",
+      "3.11.1",
+      "3.11.2",
+      "3.12.1",
+      "3.13.9",
+      "3.13.10",
+      "3.13.11",
+      "3.13.12",
+      "3.14.1",
+      "3.14.2"
+    ],
+    "AT": [
+      "3.2.1",
+      "3.2.2"
+    ],
+    "AU": [
+      "3.3.1",
+      "3.3.4",
+      "3.3.5",
+      "3.3.7"
+    ],
+    "CM": [
+      "3.4.1",
+      "3.4.2",
+      "3.4.6",
+      "3.4.8",
+      "3.4.9"
+    ],
+    "IA": [
+      "3.5.1",
+      "3.5.2",
+      "3.5.5",
+      "3.5.7",
+      "3.5.10"
+    ],
+    "IR": [
+      "3.6.2",
+      "3.6.3"
+    ],
+    "MP": [
+      "3.8.7"
+    ],
+    "PS": [
+      "3.9.1",
+      "3.9.2"
+    ]
+  }
+}
